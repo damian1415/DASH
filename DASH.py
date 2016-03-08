@@ -24,7 +24,7 @@ def vp_start_gui():
     global val, w, root
     root = Tk()
     root.title('DASH_GUI_v1')
-    geom = "725x321+252+216"
+    geom = "725x342+218+196"
     root.geometry(geom)
     DASH_support.set_Tk_var()
     w = DASH_GUI_v1 (root)
@@ -38,7 +38,7 @@ def create_DASH_GUI_v1(root, param=None):
     rt = root
     w = Toplevel (root)
     w.title('DASH_GUI_v1')
-    geom = "725x321+252+216"
+    geom = "725x342+218+196"
     w.geometry(geom)
     DASH_support.set_Tk_var()
     w_win = DASH_GUI_v1 (w)
@@ -59,6 +59,8 @@ class DASH_GUI_v1:
         _compcolor = '#d9d9d9' # X11 color: 'gray85'
         _ana1color = '#d9d9d9' # X11 color: 'gray85'
         _ana2color = '#d9d9d9' # X11 color: 'gray85'
+        font10 = "-family {Segoe UI} -size 9 -weight normal -slant "  \
+            "roman -underline 0 -overstrike 0"
         self.style = ttk.Style()
         if sys.platform == "win32":
             self.style.theme_use('winnative')
@@ -72,7 +74,7 @@ class DASH_GUI_v1:
         master.configure(highlightcolor="black")
 
         self.goBtn = Button(master)
-        self.goBtn.place(relx=0.39, rely=0.78, height=24, width=47)
+        self.goBtn.place(relx=0.39, rely=0.73, height=24, width=47)
         self.goBtn.configure(activebackground="#d9d9d9")
         self.goBtn.configure(activeforeground="#000000")
         self.goBtn.configure(background=_bgcolor)
@@ -93,12 +95,12 @@ class DASH_GUI_v1:
         self.Message1.configure(width=60)
 
         self.comSelect = ttk.Combobox(master)
-        self.comSelect.place(relx=0.68, rely=0.12, relheight=0.07, relwidth=0.2)
+        self.comSelect.place(relx=0.68, rely=0.12, relheight=0.06, relwidth=0.2)
         self.comSelect.configure(textvariable=DASH_support.combobox)
         self.comSelect.configure(takefocus="")
 
         self.txtCommand = Entry(master)
-        self.txtCommand.place(relx=0.04, rely=0.78, relheight=0.06
+        self.txtCommand.place(relx=0.04, rely=0.73, relheight=0.06
                 , relwidth=0.34)
         self.txtCommand.configure(background="white")
         self.txtCommand.configure(disabledforeground="#a3a3a3")
@@ -112,11 +114,11 @@ class DASH_GUI_v1:
         self.txtCommand.bind('<Return>', lambda e: DASH_support.goDASH(self))
 
         self.btnFwd = Button(master)
-        self.btnFwd.place(relx=0.74, rely=0.59, height=44, width=54)
+        self.btnFwd.place(relx=0.75, rely=0.5, height=44, width=54)
         self.btnFwd.configure(activebackground="#d9d9d9")
         self.btnFwd.configure(activeforeground="#000000")
         self.btnFwd.configure(background=_bgcolor)
-        self.btnFwd.configure(command=lambda:DASH_support.fwd(1))
+        self.btnFwd.configure(command=lambda: DASH_support.fwd(1))
         self.btnFwd.configure(disabledforeground="#a3a3a3")
         self.btnFwd.configure(foreground="#000000")
         self.btnFwd.configure(highlightbackground="#9b9b9b")
@@ -126,11 +128,11 @@ class DASH_GUI_v1:
         self.btnFwd.configure(text='''Forward''')
 
         self.btnLeft = Button(master)
-        self.btnLeft.place(relx=0.66, rely=0.75, height=44, width=54)
+        self.btnLeft.place(relx=0.6695, rely=0.635, height=44, width=54)
         self.btnLeft.configure(activebackground="#d9d9d9")
         self.btnLeft.configure(activeforeground="#000000")
         self.btnLeft.configure(background=_bgcolor)
-        self.btnLeft.configure(command=lambda:DASH_support.lft(1))
+        self.btnLeft.configure(command=lambda: DASH_support.lft(1))
         self.btnLeft.configure(disabledforeground="#a3a3a3")
         self.btnLeft.configure(foreground="#000000")
         self.btnLeft.configure(highlightbackground="#d9d9d9")
@@ -140,11 +142,11 @@ class DASH_GUI_v1:
         self.btnLeft.configure(text='''Left''')
 
         self.btnRvs = Button(master)
-        self.btnRvs.place(relx=0.74, rely=0.75, height=44, width=54)
+        self.btnRvs.place(relx=0.75, rely=0.77, height=44, width=54)
         self.btnRvs.configure(activebackground="#d9d9d9")
         self.btnRvs.configure(activeforeground="#000000")
         self.btnRvs.configure(background=_bgcolor)
-        self.btnRvs.configure(command=lambda:DASH_support.rvrs(1))
+        self.btnRvs.configure(command=lambda: DASH_support.rvrs(1))
         self.btnRvs.configure(disabledforeground="#a3a3a3")
         self.btnRvs.configure(foreground="#000000")
         self.btnRvs.configure(highlightbackground="#d9d9d9")
@@ -154,11 +156,11 @@ class DASH_GUI_v1:
         self.btnRvs.configure(text='''Reverse''')
 
         self.btnRight = Button(master)
-        self.btnRight.place(relx=0.83, rely=0.75, height=44, width=54)
+        self.btnRight.place(relx=0.8305, rely=0.635, height=44, width=54)
         self.btnRight.configure(activebackground="#d9d9d9")
         self.btnRight.configure(activeforeground="#000000")
         self.btnRight.configure(background=_bgcolor)
-        self.btnRight.configure(command=lambda:DASH_support.rght(1))
+        self.btnRight.configure(command=lambda: DASH_support.rght(1))
         self.btnRight.configure(disabledforeground="#a3a3a3")
         self.btnRight.configure(foreground="#000000")
         self.btnRight.configure(highlightbackground="#d9d9d9")
@@ -167,8 +169,23 @@ class DASH_GUI_v1:
         self.btnRight.configure(takefocus="0")
         self.btnRight.configure(text='''Right''')
 
+        self.btnStop = Button(master)
+        self.btnStop.place(relx=0.75, rely=0.635, height=44, width=54)
+        self.btnStop.configure(activebackground="#d9d9d9")
+        self.btnStop.configure(activeforeground="#000000")
+        self.btnStop.configure(background=_bgcolor)
+        self.btnStop.configure(command=lambda: DASH_support.stop(1))
+        self.btnStop.configure(disabledforeground="#a3a3a3")
+        self.btnStop.configure(foreground="#000000")
+        self.btnStop.configure(highlightbackground="#9b9b9b")
+        self.btnStop.configure(highlightcolor="#000000")
+        self.btnStop.configure(pady="0")
+        self.btnStop.configure(takefocus="0")
+        self.btnStop.configure(text='''Stop''')
+        self.btnStop.configure(width=54)
+
         self.listBox = Text(master)
-        self.listBox.place(relx=0.04, rely=0.03, relheight=0.7, relwidth=0.34)
+        self.listBox.place(relx=0.04, rely=0.03, relheight=0.65, relwidth=0.34)
         self.listBox.configure(background="white")
         self.listBox.configure(font="TkTextFont")
         self.listBox.configure(foreground="black")
@@ -180,6 +197,48 @@ class DASH_GUI_v1:
         self.listBox.configure(takefocus="0")
         self.listBox.configure(width=244)
         self.listBox.configure(wrap=WORD)
+
+        self.connectCOM = Button(master)
+        self.connectCOM.place(relx=0.885, rely=0.115, height=24, width=67)
+        self.connectCOM.configure(activebackground="#d9d9d9")
+        self.connectCOM.configure(activeforeground="#000000")
+        self.connectCOM.configure(background=_bgcolor)
+        self.connectCOM.configure(command=lambda: DASH_support.conCOM(1))
+        self.connectCOM.configure(disabledforeground="#a3a3a3")
+        self.connectCOM.configure(foreground="#000000")
+        self.connectCOM.configure(highlightbackground="#d9d9d9")
+        self.connectCOM.configure(highlightcolor="black")
+        self.connectCOM.configure(pady="0")
+        self.connectCOM.configure(text='''Connect''')
+        self.connectCOM.configure(width=67)
+
+        self.portScan = Button(master)
+        self.portScan.place(relx=0.885, rely=0.04, height=24, width=67)
+        self.portScan.configure(activebackground="#d9d9d9")
+        self.portScan.configure(activeforeground="#000000")
+        self.portScan.configure(background=_bgcolor)
+        self.portScan.configure(command=lambda: DASH_support.portScan(1))
+        self.portScan.configure(disabledforeground="#a3a3a3")
+        self.portScan.configure(foreground="#000000")
+        self.portScan.configure(highlightbackground="#d9d9d9")
+        self.portScan.configure(highlightcolor="black")
+        self.portScan.configure(pady="0")
+        self.portScan.configure(text='''Scan Ports''')
+        self.portScan.configure(width=67)
+
+        self.dutyCycle = Scale(master)
+        self.dutyCycle.place(relx=0.51, rely=0.03, relwidth=0.0, relheight=0.92
+                             , width=45)
+        self.dutyCycle.configure(activebackground="#d9d9d9")
+        self.dutyCycle.configure(background=_bgcolor)
+        self.dutyCycle.configure(font=font10)
+        self.dutyCycle.configure(foreground="#000000")
+        self.dutyCycle.configure(from_="100.0")
+        self.dutyCycle.configure(highlightbackground="#d9d9d9")
+        self.dutyCycle.configure(highlightcolor="black")
+        self.dutyCycle.configure(length="310")
+        self.dutyCycle.configure(to="0.0")
+        self.dutyCycle.configure(troughcolor="#d9d9d9")
 
         self.menubar = Menu(master,bg=_bgcolor,fg=_fgcolor)
         master.configure(menu = self.menubar)

@@ -28,6 +28,16 @@ def set_Tk_var():
     combobox = StringVar()
 
 
+def conCOM(p1):
+    print('DASH_support.conCOM')
+    sys.stdout.flush()
+
+
+def portScan(p1):
+    print('DASH_support.portScan')
+    sys.stdout.flush()
+
+
 def rght(p1):
     print('DASH_support.rght')
     sys.stdout.flush()
@@ -70,7 +80,9 @@ def destroy_window():
 def goDASH(p1):
     print(p1.txtCommand.get())
     p1.listBox.tag_configure('color', foreground='#00aa00')
-    p1.listBox.insert(END, ">" + p1.txtCommand.get() + "\n", 'color')
+    p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
+    p1.listBox.tag_configure('color1', foreground='#aa0000')
+    p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) +  "\n", 'color1')
     p1.btnFwd.focus_set()
     sys.stdout.flush()
 

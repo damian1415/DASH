@@ -1,21 +1,23 @@
-import Tkinter as tk
+from Tkinter import *
+import ttk
 
-counter = 0
-def counter_label(label):
-    def count():
-        global counter
-        counter += 1
-        label.config(text=str(counter))
-        label.after(1000, count)
-    count()
+class App:
+
+    value_of_combo = 'X'
 
 
-root = tk.Tk()
-root.title("Counting Second")
-label = tk.Label(root, fg="green")
-label.pack()
-counter_label(label)
-button = tk.Button(root, text='Stop', width=25, command=root.destroy)
-button.pack()
+    def __init__(self, parent):
+        self.parent = parent
+        self.combo()
 
-root.mainloop()
+    def combo(self):
+        self.box_value = StringVar()
+        self.box = ttk.Combobox(self.parent, textvariable=self.box_value)
+        self.box['values'] = ('X', 'Y', 'Z')
+        self.box.current(0)
+        self.box.grid(column=0, row=0)
+
+if __name__ == '__main__':
+    root = Tk()
+    app = App(root)
+    root.mainloop()

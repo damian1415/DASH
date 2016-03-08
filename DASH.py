@@ -109,6 +109,7 @@ class DASH_GUI_v1:
         self.txtCommand.configure(insertbackground="black")
         self.txtCommand.configure(selectbackground="#c4c4c4")
         self.txtCommand.configure(selectforeground="black")
+        self.txtCommand.bind('<Return>', lambda e: DASH_support.goDASH(self))
 
         self.btnFwd = Button(master)
         self.btnFwd.place(relx=0.74, rely=0.59, height=44, width=54)

@@ -20,6 +20,7 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 
+
 def set_Tk_var():
     # These are Tk variables used passed to Tkinter and must be
     # defined before the widgets using them are created.
@@ -28,31 +29,29 @@ def set_Tk_var():
 
 
 def rght(p1):
-    print('DASH_support.bRight')
+    print('DASH_support.rght')
     sys.stdout.flush()
 
+
 def rvrs(p1):
-    print('DASH_support.bRvrs')
+    print('DASH_support.rvrs')
     sys.stdout.flush()
+
 
 def fwd(p1):
     print('DASH_support.fwd')
     sys.stdout.flush()
 
-def goDASH(p1):
-    print(p1.txtCommand.get())
-    p1.listBox.tag_configure('color', foreground='#00aa00')
-    p1.listBox.insert(END,">" + p1.txtCommand.get() + "\n", 'color')
-    p1.btnFwd.focus_set()
-    sys.stdout.flush()
 
 def lft(p1):
     print('DASH_support.lft')
     sys.stdout.flush()
 
+
 def stop(p1):
     print('DASH_support.stop')
     sys.stdout.flush()
+
 
 def init(top, gui, arg=None):
     global w, top_level, root
@@ -60,13 +59,22 @@ def init(top, gui, arg=None):
     top_level = top
     root = top
 
+
 def destroy_window():
     # Function which closes the window.
     global top_level
     top_level.destroy()
     top_level = None
 
+
+def goDASH(p1):
+    print(p1.txtCommand.get())
+    p1.listBox.tag_configure('color', foreground='#00aa00')
+    p1.listBox.insert(END, ">" + p1.txtCommand.get() + "\n", 'color')
+    p1.btnFwd.focus_set()
+    sys.stdout.flush()
+
+
 if __name__ == '__main__':
     import DASH
     DASH.vp_start_gui()
-

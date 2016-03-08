@@ -20,6 +20,7 @@ except ImportError:
 
 import DASH_support
 
+
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
@@ -28,11 +29,13 @@ def vp_start_gui():
     geom = "725x342+218+196"
     root.geometry(geom)
     DASH_support.set_Tk_var()
-    w = DASH_GUI_v1 (root)
+    w = DASH_GUI_v1(root)
     DASH_support.init(root, w)
     root.mainloop()
 
 w = None
+
+
 def create_DASH_GUI_v1(root, param=None):
     '''Starting point when module is imported by another program.'''
     global w, w_win, rt
@@ -42,15 +45,15 @@ def create_DASH_GUI_v1(root, param=None):
     geom = "725x342+218+196"
     w.geometry(geom)
     DASH_support.set_Tk_var()
-    w_win = DASH_GUI_v1 (w)
+    w_win = DASH_GUI_v1(w)
     DASH_support.init(w, w_win, param)
     return w_win
+
 
 def destroy_DASH_GUI_v1():
     global w
     w.destroy()
     w = None
-
 
 
 class DASH_GUI_v1:
@@ -65,11 +68,11 @@ class DASH_GUI_v1:
         self.style = ttk.Style()
         if sys.platform == "win32":
             self.style.theme_use('winnative')
-        self.style.configure('.',background=_bgcolor)
-        self.style.configure('.',foreground=_fgcolor)
-        self.style.configure('.',font="TkDefaultFont")
-        self.style.map('.',background=
-            [('selected', _compcolor), ('active',_ana2color)])
+        self.style.configure('.', background=_bgcolor)
+        self.style.configure('.', foreground=_fgcolor)
+        self.style.configure('.', font="TkDefaultFont")
+        self.style.map('.', background=
+                       [('selected', _compcolor), ('active', _ana2color)])
         master.configure(background="#d9d9d9")
         master.configure(highlightbackground="#d9d9d9")
         master.configure(highlightcolor="black")
@@ -102,7 +105,7 @@ class DASH_GUI_v1:
 
         self.txtCommand = Entry(master)
         self.txtCommand.place(relx=0.04, rely=0.73, relheight=0.06
-                , relwidth=0.34)
+                              , relwidth=0.34)
         self.txtCommand.configure(background="white")
         self.txtCommand.configure(disabledforeground="#a3a3a3")
         self.txtCommand.configure(font="TkFixedFont")
@@ -199,7 +202,6 @@ class DASH_GUI_v1:
         self.listBox.configure(width=244)
         self.listBox.configure(wrap=WORD)
 
-
         self.connectCOM = Button(master)
         self.connectCOM.place(relx=0.885, rely=0.115, height=24, width=67)
         self.connectCOM.configure(activebackground="#d9d9d9")
@@ -213,7 +215,6 @@ class DASH_GUI_v1:
         self.connectCOM.configure(pady="0")
         self.connectCOM.configure(text='''Connect''')
         self.connectCOM.configure(width=67)
-
 
         self.portScan = Button(master)
         self.portScan.place(relx=0.885, rely=0.04, height=24, width=67)
@@ -243,23 +244,19 @@ class DASH_GUI_v1:
         self.dutyCycle.configure(to="0.0")
         self.dutyCycle.configure(troughcolor="#d9d9d9")
 
-        self.menubar = Menu(master,bg=_bgcolor,fg=_fgcolor)
+        self.menubar = Menu(master, bg=_bgcolor, fg=_fgcolor)
         master.configure(menu = self.menubar)
 
         self.goBtn.configure(command=lambda: DASH_support.goDASH(self))
         self.btnFwd.focus_set()
-        self.btnFwd.bind('<Key-Up>',lambda e:DASH_support.fwd(1))
-        self.btnFwd.bind('<KeyRelease-Up>',lambda e:DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Left>',lambda e:DASH_support.lft(1))
-        self.btnFwd.bind('<KeyRelease-Left>',lambda e:DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Down>',lambda e:DASH_support.rvrs(1))
-        self.btnFwd.bind('<KeyRelease-Down>',lambda e:DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Right>',lambda e:DASH_support.rght(1))
-        self.btnFwd.bind('<KeyRelease-Right>',lambda e:DASH_support.stop(1))
-
-
-
-
+        self.btnFwd.bind('<Key-Up>', lambda e: DASH_support.fwd(1))
+        self.btnFwd.bind('<KeyRelease-Up>', lambda e: DASH_support.stop(1))
+        self.btnFwd.bind('<Key-Left>', lambda e: DASH_support.lft(1))
+        self.btnFwd.bind('<KeyRelease-Left>', lambda e: DASH_support.stop(1))
+        self.btnFwd.bind('<Key-Down>', lambda e: DASH_support.rvrs(1))
+        self.btnFwd.bind('<KeyRelease-Down>', lambda e: DASH_support.stop(1))
+        self.btnFwd.bind('<Key-Right>', lambda e: DASH_support.rght(1))
+        self.btnFwd.bind('<KeyRelease-Right>', lambda e: DASH_support.stop(1))
 
 
 if __name__ == '__main__':

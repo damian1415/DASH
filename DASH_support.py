@@ -117,17 +117,30 @@ def destroy_window():
     top_level = None
 
 
+def match_cmds(p1):
+    matched = [c for c in cmds if c.startswith(p1)]
+    if matched:
+        return matched[0]
+
+
 def goDASH(p1):
     p1.listBox.tag_configure('color', foreground='#00aa00')
     p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
     p1.listBox.tag_configure('color1', foreground='#aa0000')
-    p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) +  "\n", 'color1')
+    p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n", 'color1')
+    cmds = ["forward", "right", "left", "stop", "revers", "set"]
     cmd = p1.txtCommand.get()
-    if cmd == 'Set':
+    if cmd.lower() == 'set':
         BT.write(str(unichr(p1.dutyCycle.get())))
         print(p1.dutyCycle.get())
-    else:
-        print('Backwards')
+    elif cmd.lower() == 'forward':
+        print('Forward')
+    elif cmd == 'Reverse':
+        print('Reverse')
+    elif cmd == 'Right':
+        print('Right')
+    elif cmd == 'Left':
+        print('Left')
     p1.btnFwd.focus_set()
     sys.stdout.flush()
 

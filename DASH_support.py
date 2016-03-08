@@ -23,6 +23,8 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = 1
 
+BT = serial.Serial()
+
 
 def set_Tk_var():
     # These are Tk variables used passed to Tkinter and must be
@@ -61,7 +63,11 @@ def serial_ports():
 
 
 def conCOM(p1):
-    print('DASH_support.conCOM')
+    ports = p1.comSelect.get()
+    BT.port = ports
+    BT.baudrate = 115200
+    BT.open()
+    print(BT.isOpen())
     sys.stdout.flush()
 
 
@@ -112,11 +118,16 @@ def destroy_window():
 
 
 def goDASH(p1):
-    print(p1.txtCommand.get())
     p1.listBox.tag_configure('color', foreground='#00aa00')
     p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
     p1.listBox.tag_configure('color1', foreground='#aa0000')
     p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) +  "\n", 'color1')
+    cmd = p1.txtCommand.get()
+    if cmd == 'Set':
+        BT.write(str(unichr(p1.dutyCycle.get())))
+        print(p1.dutyCycle.get())
+    else:
+        print('Backwards')
     p1.btnFwd.focus_set()
     sys.stdout.flush()
 

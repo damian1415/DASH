@@ -4,6 +4,7 @@
 # In conjunction with Tcl version 8.6
 #    Mar 06, 2016 10:02:16 PM
 import sys
+import serial
 
 try:
     from Tkinter import *
@@ -198,6 +199,7 @@ class DASH_GUI_v1:
         self.listBox.configure(width=244)
         self.listBox.configure(wrap=WORD)
 
+
         self.connectCOM = Button(master)
         self.connectCOM.place(relx=0.885, rely=0.115, height=24, width=67)
         self.connectCOM.configure(activebackground="#d9d9d9")
@@ -211,6 +213,7 @@ class DASH_GUI_v1:
         self.connectCOM.configure(pady="0")
         self.connectCOM.configure(text='''Connect''')
         self.connectCOM.configure(width=67)
+
 
         self.portScan = Button(master)
         self.portScan.place(relx=0.885, rely=0.04, height=24, width=67)

@@ -27,15 +27,11 @@ def set_Tk_var():
     combobox = StringVar()
 
 
-def bLeft(p1):
-    print('DASH_support.bLeft')
-    sys.stdout.flush()
-
-def bRight(p1):
+def rght(p1):
     print('DASH_support.bRight')
     sys.stdout.flush()
 
-def bRvrs(p1):
+def rvrs(p1):
     print('DASH_support.bRvrs')
     sys.stdout.flush()
 
@@ -44,7 +40,10 @@ def fwd(p1):
     sys.stdout.flush()
 
 def goDASH(p1):
-    print(p1)
+    print(p1.txtCommand.get())
+    p1.listBox.tag_configure('color', foreground='#00aa00')
+    p1.listBox.insert(END,">" + p1.txtCommand.get() + "\n", 'color')
+    p1.btnFwd.focus_set()
     sys.stdout.flush()
 
 def lft(p1):

@@ -115,6 +115,7 @@ class DASH_GUI_v1:
         self.txtCommand.configure(insertbackground="black")
         self.txtCommand.configure(selectbackground="#c4c4c4")
         self.txtCommand.configure(selectforeground="black")
+        self.txtCommand.focus_set()
         self.txtCommand.bind('<Return>', lambda e: DASH_support.goDASH(self))
 
         self.btnFwd = Button(master)
@@ -188,19 +189,19 @@ class DASH_GUI_v1:
         self.btnStop.configure(text='''Stop''')
         self.btnStop.configure(width=54)
 
-        self.listBox = Text(master)
-        self.listBox.place(relx=0.04, rely=0.03, relheight=0.65, relwidth=0.34)
+        self.listBox = ScrolledListBox(master)
+        self.listBox.place(relx=0.04, rely=0.03, relheight=0.65, relwidth=0.45)
         self.listBox.configure(background="white")
         self.listBox.configure(font="TkTextFont")
         self.listBox.configure(foreground="black")
         self.listBox.configure(highlightbackground="#d9d9d9")
         self.listBox.configure(highlightcolor="black")
-        self.listBox.configure(insertbackground="black")
+        # self.listBox.configure(insertbackground="black")
         self.listBox.configure(selectbackground="#c4c4c4")
         self.listBox.configure(selectforeground="black")
         self.listBox.configure(takefocus="0")
         self.listBox.configure(width=244)
-        self.listBox.configure(wrap=WORD)
+        # self.listBox.configure(wrap=WORD)
 
         self.connectCOM = Button(master)
         self.connectCOM.place(relx=0.885, rely=0.115, height=24, width=67)
@@ -248,16 +249,90 @@ class DASH_GUI_v1:
         master.configure(menu = self.menubar)
 
         self.goBtn.configure(command=lambda: DASH_support.goDASH(self))
-        self.btnFwd.focus_set()
-        self.btnFwd.bind('<Key-Up>', lambda e: DASH_support.fwd(1))
-        self.btnFwd.bind('<KeyRelease-Up>', lambda e: DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Left>', lambda e: DASH_support.lft(1))
-        self.btnFwd.bind('<KeyRelease-Left>', lambda e: DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Down>', lambda e: DASH_support.rvrs(1))
-        self.btnFwd.bind('<KeyRelease-Down>', lambda e: DASH_support.stop(1))
-        self.btnFwd.bind('<Key-Right>', lambda e: DASH_support.rght(1))
-        self.btnFwd.bind('<KeyRelease-Right>', lambda e: DASH_support.stop(1))
+        self.txtCommand.bind('<Key-Up>', lambda e: DASH_support.fwd(1))
+        self.txtCommand.bind('<KeyRelease-Up>', lambda e: DASH_support.stop(1))
+        self.txtCommand.bind('<Key-Left>', lambda e: DASH_support.lft(1))
+        self.txtCommand.bind('<KeyRelease-Left>', lambda e: DASH_support.stop(1))
+        self.txtCommand.bind('<Key-Down>', lambda e: DASH_support.rvrs(1))
+        self.txtCommand.bind('<KeyRelease-Down>', lambda e: DASH_support.stop(1))
+        self.txtCommand.bind('<Key-Right>', lambda e: DASH_support.rght(1))
+        self.txtCommand.bind('<KeyRelease-Right>', lambda e: DASH_support.stop(1))
 
+
+# The following code is added to facilitate the Scrolled widgets you specified.
+class AutoScroll(object):
+    '''Configure the scrollbars for a widget.'''
+
+    def __init__(self, master):
+        #  Rozen. Added the try-except clauses so that this class
+        #  could be used for scrolled entry widget for which vertical
+        #  scrolling is not supported. 5/7/14.
+        try:
+            vsb = ttk.Scrollbar(master, orient='vertical', command=self.yview)
+        except:
+            pass
+        hsb = ttk.Scrollbar(master, orient='horizontal', command=self.xview)
+
+        #self.configure(yscrollcommand=self._autoscroll(vsb),
+        #    xscrollcommand=self._autoscroll(hsb))
+        try:
+            self.configure(yscrollcommand=self._autoscroll(vsb))
+        except:
+            pass
+        self.configure(xscrollcommand=self._autoscroll(hsb))
+
+        self.grid(column=0, row=0, sticky='nsew')
+        try:
+            vsb.grid(column=1, row=0, sticky='ns')
+        except:
+            pass
+        hsb.grid(column=0, row=1, sticky='ew')
+
+        master.grid_columnconfigure(0, weight=1)
+        master.grid_rowconfigure(0, weight=1)
+
+        # Copy geometry methods of master  (taken from ScrolledText.py)
+        if py3:
+            methods = Pack.__dict__.keys() | Grid.__dict__.keys() \
+                  | Place.__dict__.keys()
+        else:
+            methods = Pack.__dict__.keys() + Grid.__dict__.keys() \
+                  + Place.__dict__.keys()
+
+        for meth in methods:
+            if meth[0] != '_' and meth not in ('config', 'configure'):
+                setattr(self, meth, getattr(master, meth))
+
+    @staticmethod
+    def _autoscroll(sbar):
+        '''Hide and show scrollbar as needed.'''
+        def wrapped(first, last):
+            first, last = float(first), float(last)
+            if first <= 0 and last >= 1:
+                sbar.grid_remove()
+            else:
+                sbar.grid()
+            sbar.set(first, last)
+        return wrapped
+
+    def __str__(self):
+        return str(self.master)
+
+def _create_container(func):
+    '''Creates a ttk Frame with a given master, and use this new frame to
+    place the scrollbars and the widget.'''
+    def wrapped(cls, master, **kw):
+        container = ttk.Frame(master)
+        return func(cls, container, **kw)
+    return wrapped
+
+class ScrolledListBox(AutoScroll, Listbox):
+    '''A standard Tkinter Text widget with scrollbars that will
+    automatically show/hide as needed.'''
+    @_create_container
+    def __init__(self, master, **kw):
+        Listbox.__init__(self, master, **kw)
+        AutoScroll.__init__(self, master)
 
 if __name__ == '__main__':
     vp_start_gui()

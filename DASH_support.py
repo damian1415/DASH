@@ -123,25 +123,56 @@ def match_cmds(p1):
         return matched[0]
 
 
+def prnt_command(p1, pwrcom):
+    if pwrcom:
+        p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycle.get()) + "\n")
+    else:
+        p1.listBox.insert(END, ">" + p1.txtCommand.get() + "\n")
+
+
+def prnt_help(p1):
+    p1.listBox.insert(END, 'LIST OF COMMANDS:(commands are case insensitive)'
+                      , "Forward - DASH moves forward with power from slider"
+                      , 'Reverse - DASH moves backward with power from slider'
+                      , 'Right - DASH turns to the right'
+                      , 'Left - DASH turns to the left'
+                      , 'Stop - DASH stops'
+                      , 'Set - Used for adjusting motor speed')
+
 def goDASH(p1):
-    p1.listBox.tag_configure('color', foreground='#00aa00')
-    p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
-    p1.listBox.tag_configure('color1', foreground='#aa0000')
-    p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n", 'color1')
-    cmds = ["forward", "right", "left", "stop", "revers", "set"]
+    # p1.listBox.tag_configure('color', foreground='#00aa00')
+    # p1.listBox.tag_configure('color1', foreground='#aa0000')
+    # p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
+    # p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n", 'color1')
+    # p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycle.get()) + "\n")
+    # p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n")
     cmd = p1.txtCommand.get()
     if cmd.lower() == 'set':
-        BT.write(str(unichr(p1.dutyCycle.get())))
+        prnt_command(p1, 1)
+        x = BT.write(str(unichr(p1.dutyCycle.get())))
         print(p1.dutyCycle.get())
     elif cmd.lower() == 'forward':
+        prnt_command(p1, 1)
         print('Forward')
-    elif cmd == 'Reverse':
+    elif cmd.lower() == 'reverse':
+        prnt_command(p1, 1)
         print('Reverse')
-    elif cmd == 'Right':
+    elif cmd.lower() == 'right':
+        prnt_command(p1, 0)
         print('Right')
-    elif cmd == 'Left':
+    elif cmd.lower() == 'left':
+        prnt_command(p1, 0)
         print('Left')
-    p1.btnFwd.focus_set()
+    elif cmd.lower() == 'stop':
+        prnt_command(p1, 0)
+        print('Stop')
+    elif cmd.lower() == 'help':
+        prnt_help(p1)
+    else:
+        p1.listBox.insert(END, "Unknown Command: " + p1.txtCommand.get())
+    p1.txtCommand.focus_set()
+    p1.txtCommand.delete(0, END)
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 

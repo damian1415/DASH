@@ -10,6 +10,7 @@ import DASH
 import serial
 import glob
 import sys
+import timeit
 
 try:
     from Tkinter import *
@@ -66,6 +67,7 @@ def conCOM(p1):
     ports = p1.comSelect.get()
     BT.port = ports
     BT.baudrate = 115200
+    BT.timeout = 0.1
     BT.open()
     print(BT.isOpen())
     sys.stdout.flush()
@@ -117,12 +119,6 @@ def destroy_window():
     top_level = None
 
 
-def match_cmds(p1):
-    matched = [c for c in cmds if c.startswith(p1)]
-    if matched:
-        return matched[0]
-
-
 def prnt_command(p1, pwrcom):
     if pwrcom:
         p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycle.get()) + "\n")
@@ -131,13 +127,14 @@ def prnt_command(p1, pwrcom):
 
 
 def prnt_help(p1):
-    p1.listBox.insert(END, 'LIST OF COMMANDS:(commands are case insensitive)'
-                      , "Forward - DASH moves forward with power from slider"
-                      , 'Reverse - DASH moves backward with power from slider'
-                      , 'Right - DASH turns to the right'
-                      , 'Left - DASH turns to the left'
-                      , 'Stop - DASH stops'
-                      , 'Set - Used for adjusting motor speed')
+    p1.listBox.insert(END, 'LIST OF COMMANDS:(commands are case insensitive)',
+                      "Forward - DASH moves forward with power from slider",
+                      'Reverse - DASH moves backward with power from slider',
+                      'Right - DASH turns to the right',
+                      'Left - DASH turns to the left',
+                      'Stop - DASH stops',
+                      'Set - Used for adjusting motor speed')
+
 
 def goDASH(p1):
     # p1.listBox.tag_configure('color', foreground='#00aa00')
@@ -149,7 +146,8 @@ def goDASH(p1):
     cmd = p1.txtCommand.get()
     if cmd.lower() == 'set':
         prnt_command(p1, 1)
-        x = BT.write(str(unichr(p1.dutyCycle.get())))
+        BT.write(str(unichr(p1.dutyCycle.get())))
+        bread = BT.read(1)
         print(p1.dutyCycle.get())
     elif cmd.lower() == 'forward':
         prnt_command(p1, 1)
@@ -168,6 +166,21 @@ def goDASH(p1):
         print('Stop')
     elif cmd.lower() == 'help':
         prnt_help(p1)
+    elif cmd.isdigit():
+        print(int(p1.txtCommand.get()) % 192)
+    elif cmd.lower() == 'test':
+        start = timeit.default_timer()
+        BT.write('%')
+        mid = timeit.default_timer() - start
+        bread = BT.read(1)
+        finish = timeit.default_timer() - start
+        triptime = finish/2
+        datarate = 1/triptime
+        print(mid)
+        print(start)
+        print(finish)
+        print(bread)
+        print(datarate)
     else:
         p1.listBox.insert(END, "Unknown Command: " + p1.txtCommand.get())
     p1.txtCommand.focus_set()

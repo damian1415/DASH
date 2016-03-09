@@ -90,7 +90,7 @@ class DASH_GUI_v1:
         self.goBtn.configure(text='''Go''')
 
         self.portLabel = Message(master)
-        self.portLabel.place(relx=0.62, rely=0.12, relheight=0.07, relwidth=0.05)
+        self.portLabel.place(relx=0.63, rely=0.11, relheight=0.07, relwidth=0.05)
         self.portLabel.configure(background=_bgcolor)
         self.portLabel.configure(foreground="#000000")
         self.portLabel.configure(highlightbackground="#d9d9d9")
@@ -232,7 +232,7 @@ class DASH_GUI_v1:
         self.portScan.configure(width=67)
 
         self.dutyCycle = Scale(master)
-        self.dutyCycle.place(relx=0.51, rely=0.03, relwidth=0.0, relheight=0.92
+        self.dutyCycle.place(relx=0.53, rely=0.03, relwidth=0.0, relheight=0.92
                              , width=45)
         self.dutyCycle.configure(activebackground="#d9d9d9")
         self.dutyCycle.configure(background=_bgcolor)
@@ -273,7 +273,7 @@ class AutoScroll(object):
             pass
         hsb = ttk.Scrollbar(master, orient='horizontal', command=self.xview)
 
-        #self.configure(yscrollcommand=self._autoscroll(vsb),
+        # self.configure(yscrollcommand=self._autoscroll(vsb),
         #    xscrollcommand=self._autoscroll(hsb))
         try:
             self.configure(yscrollcommand=self._autoscroll(vsb))
@@ -318,6 +318,7 @@ class AutoScroll(object):
     def __str__(self):
         return str(self.master)
 
+
 def _create_container(func):
     '''Creates a ttk Frame with a given master, and use this new frame to
     place the scrollbars and the widget.'''
@@ -325,6 +326,7 @@ def _create_container(func):
         container = ttk.Frame(master)
         return func(cls, container, **kw)
     return wrapped
+
 
 class ScrolledListBox(AutoScroll, Listbox):
     '''A standard Tkinter Text widget with scrollbars that will

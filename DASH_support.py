@@ -67,7 +67,7 @@ def conCOM(p1):
     ports = p1.comSelect.get()
     BT.port = ports
     BT.baudrate = 115200
-    BT.timeout = 0.1
+    BT.timeout = 1
     BT.open()
     print(BT.isOpen())
     sys.stdout.flush()
@@ -82,26 +82,36 @@ def portScan(p1):
 
 def rght(p1):
     print('DASH_support.rght')
+    p1.listBox.insert(END, "> Right" + "\n")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def rvrs(p1):
     print('DASH_support.rvrs')
+    p1.listBox.insert(END, "> Reverse" + "\n")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def fwd(p1):
     print('DASH_support.fwd')
+    p1.listBox.insert(END, "> Forward" + "\n")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def lft(p1):
     print('DASH_support.lft')
+    p1.listBox.insert(END, "> Left" + "\n")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def stop(p1):
     print('DASH_support.stop')
+    p1.listBox.insert(END, "> Stop" + "\n")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
@@ -170,17 +180,31 @@ def goDASH(p1):
         print(int(p1.txtCommand.get()) % 192)
     elif cmd.lower() == 'test':
         start = timeit.default_timer()
-        BT.write('%')
+        count = 0
+        while count < 100:
+            BT.write(str(unichr(count)))
+            count += 1
         mid = timeit.default_timer() - start
-        bread = BT.read(1)
+        bread = BT.read(100)
         finish = timeit.default_timer() - start
         triptime = finish/2
         datarate = 1/triptime
-        print(mid)
+        p1.listBox.insert(END, bread)
         print(start)
+        print(mid)
         print(finish)
         print(bread)
         print(datarate)
+    elif cmd.lower() == 'read':
+        start = timeit.default_timer()
+        BT.write("12345678901234567890123456789012345678901234567890")
+        bread = BT.read(50)
+        finish = timeit.default_timer() - start
+        p1.listBox.insert(END, bread)
+        latency = (finish/50)*1000
+        print(finish)
+        print(bread)
+        print(str(latency) + "ms")
     else:
         p1.listBox.insert(END, "Unknown Command: " + p1.txtCommand.get())
     p1.txtCommand.focus_set()

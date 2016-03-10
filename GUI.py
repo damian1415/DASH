@@ -1,23 +1,15 @@
-from Tkinter import *
-import ttk
+import time
+import timeit
 
-class App:
-
-    value_of_combo = 'X'
-
-
-    def __init__(self, parent):
-        self.parent = parent
-        self.combo()
-
-    def combo(self):
-        self.box_value = StringVar()
-        self.box = ttk.Combobox(self.parent, textvariable=self.box_value)
-        self.box['values'] = ('X', 'Y', 'Z')
-        self.box.current(0)
-        self.box.grid(column=0, row=0)
-
-if __name__ == '__main__':
-    root = Tk()
-    app = App(root)
-    root.mainloop()
+start = time.time()
+x = 0
+while not x == 100:
+    ptime = time.time() - start
+    print(ptime)
+    x += 1
+start = timeit.default_timer()
+x = 0
+while not x == 100:
+    ptime = timeit.default_timer() - start
+    print(ptime)
+    x += 1

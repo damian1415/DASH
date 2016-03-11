@@ -70,6 +70,8 @@ def conCOM(p1):
     BT.timeout = 1
     BT.open()
     print(BT.isOpen())
+    p1.listBox.insert(END, "Connected")
+    p1.listBox.see(END)
     sys.stdout.flush()
 
 
@@ -147,12 +149,6 @@ def prnt_help(p1):
 
 
 def goDASH(p1):
-    # p1.listBox.tag_configure('color', foreground='#00aa00')
-    # p1.listBox.tag_configure('color1', foreground='#aa0000')
-    # p1.listBox.insert(END, ">" + p1.txtCommand.get(), 'color')
-    # p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n", 'color1')
-    # p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycle.get()) + "\n")
-    # p1.listBox.insert(END, " Power: " + str(p1.dutyCycle.get()) + "\n")
     cmd = p1.txtCommand.get()
     if cmd.lower() == 'set':
         prnt_command(p1, 1)
@@ -195,16 +191,17 @@ def goDASH(p1):
         print(finish)
         print(bread)
         print(datarate)
-    elif cmd.lower() == 'read':
+    elif cmd.lower() == 'latency':
         start = timeit.default_timer()
         BT.write("12345678901234567890123456789012345678901234567890")
         bread = BT.read(50)
         finish = timeit.default_timer() - start
-        p1.listBox.insert(END, bread)
         latency = (finish/50)*1000
-        print(finish)
-        print(bread)
-        print(str(latency) + "ms")
+        p1.listBox.insert(END, "Latency: " + str(latency) + "ms\n")
+    elif cmd.lower() == 'feedback':
+        BT.write("?")
+        bread = BT.read(2)
+        p1.listBox.insert(END, bread + "\n")
     else:
         p1.listBox.insert(END, "Unknown Command: " + p1.txtCommand.get())
     p1.txtCommand.focus_set()

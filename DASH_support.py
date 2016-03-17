@@ -11,6 +11,7 @@ import serial
 import glob
 import sys
 import timeit
+from string import join
 
 try:
     from Tkinter import *
@@ -133,7 +134,7 @@ def destroy_window():
 
 def prnt_command(p1, pwrcom):
     if pwrcom:
-        p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycle.get()) + "\n")
+        p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycleLeft.get()) + "\n")
     else:
         p1.listBox.insert(END, ">" + p1.txtCommand.get() + "\n")
 
@@ -148,16 +149,26 @@ def prnt_help(p1):
                       'Set - Used for adjusting motor speed')
 
 
+
 def goDASH(p1):
     cmd = p1.txtCommand.get()
     if cmd.lower() == 'set':
         prnt_command(p1, 1)
-        BT.write(str(unichr(p1.dutyCycle.get())))
+        BT.write(str(unichr(p1.dutyCycleRight.get())))
         bread = BT.read(1)
         print(p1.dutyCycle.get())
     elif cmd.lower() == 'forward':
+        biteOne = chr(0b11100000)
+        biteTwo = chr(p1.dutyCycleLeft.get())
+        biteThree = chr(p1.dutyCycleRight.get())
+        biteFour = chr(0b00000000)
+        biteArray = [biteOne, biteTwo, biteThree, biteFour]
+        message = "".join(biteArray)
+        BT.write(message)
+        bread = BT.read(2)
+        left = ord(bread[1])
         prnt_command(p1, 1)
-        print('Forward')
+        p1.listBox.insert(END, str(left) + "\n")
     elif cmd.lower() == 'reverse':
         prnt_command(p1, 1)
         print('Reverse')

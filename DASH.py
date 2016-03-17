@@ -256,7 +256,7 @@ class DASH_GUI_v1:
         self.dutyCycleLeft.configure(highlightbackground="#d9d9d9")
         self.dutyCycleLeft.configure(highlightcolor="black")
         self.dutyCycleLeft.configure(length="310")
-        self.dutyCycleLeft.configure(to="-100.0")
+        self.dutyCycleLeft.configure(to="0.0")
         self.dutyCycleLeft.configure(troughcolor="#d9d9d9")
 
         self.dutyCycleRight = Scale(master)
@@ -270,7 +270,7 @@ class DASH_GUI_v1:
         self.dutyCycleRight.configure(highlightbackground="#d9d9d9")
         self.dutyCycleRight.configure(highlightcolor="black")
         self.dutyCycleRight.configure(length="310")
-        self.dutyCycleRight.configure(to="-100.0")
+        self.dutyCycleRight.configure(to="0.0")
         self.dutyCycleRight.configure(troughcolor="#d9d9d9")
 
         self.menubar = Menu(master, bg=_bgcolor, fg=_fgcolor)

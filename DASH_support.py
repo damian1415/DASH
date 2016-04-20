@@ -67,8 +67,8 @@ def serial_ports():
 def conCOM(p1):
     ports = p1.comSelect.get()
     BT.port = ports
-    BT.baudrate = 115200
-    BT.timeout = 1
+    BT.baudrate = 921600
+    BT.timeout = 3
     BT.open()
     print(BT.isOpen())
     p1.listBox.insert(END, "Connected")
@@ -84,36 +84,66 @@ def portScan(p1):
 
 
 def rght(p1):
-    print('DASH_support.rght')
-    p1.listBox.insert(END, "> Right" + "\n")
+    biteOne = chr(0b10100000)
+    biteTwo = chr(p1.dutyCycleLeft.get())
+    biteThree = chr(p1.dutyCycleRight.get())
+    biteFour = chr(0b00000000)
+    bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "> Right \n")
+    prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def rvrs(p1):
-    print('DASH_support.rvrs')
-    p1.listBox.insert(END, "> Reverse" + "\n")
+    biteOne = chr(0b10000000)
+    biteTwo = chr(p1.dutyCycleLeft.get())
+    biteThree = chr(p1.dutyCycleRight.get())
+    biteFour = chr(0b00000000)
+    bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "> Reverse \n")
+    prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def fwd(p1):
-    print('DASH_support.fwd')
-    p1.listBox.insert(END, "> Forward" + "\n")
+    biteOne = chr(0b11100000)
+    biteTwo = chr(p1.dutyCycleLeft.get())
+    biteThree = chr(p1.dutyCycleRight.get())
+    biteFour = chr(0b00000000)
+    bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "> Forward \n")
+    prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def lft(p1):
-    print('DASH_support.lft')
-    p1.listBox.insert(END, "> Left" + "\n")
+    biteOne = chr(0b11000000)
+    biteTwo = chr(p1.dutyCycleLeft.get())
+    biteThree = chr(p1.dutyCycleRight.get())
+    biteFour = chr(0b00000000)
+    bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "> Forward \n")
+    prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     p1.listBox.see(END)
     sys.stdout.flush()
 
 
 def stop(p1):
-    print('DASH_support.stop')
-    p1.listBox.insert(END, "> Stop" + "\n")
+    biteOne = chr(0b11100000)
+    biteTwo = chr(0b00000000)
+    biteThree = chr(0b00000000)
+    biteFour = chr(0b00000000)
+    bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "> Stop \n")
+    prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+    p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     p1.listBox.see(END)
     sys.stdout.flush()
 
@@ -132,11 +162,29 @@ def destroy_window():
     top_level = None
 
 
+def mvcmd(p1, b1, b2, b3, b4):
+    bitearray = [b1, b2, b3, b4]
+    message = "".join(bitearray)
+    print(bitearray)
+    BT.write(message)
+    bread = BT.read(2)
+    return bread
+
+
+def prntBS(p1, b1, b2, b3, b4):
+    p1.listBox.insert(END, "Byte 1: " + hex(ord(b1)) + "\n")
+    p1.listBox.insert(END, "Byte 2: " + hex(ord(b2)) + "\n")
+    p1.listBox.insert(END, "Byte 3: " + hex(ord(b3)) + "\n")
+    p1.listBox.insert(END, "Byte 4: " + hex(ord(b4)) + "\n")
+
+
 def prnt_command(p1, pwrcom):
     if pwrcom:
-        p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " + str(p1.dutyCycleLeft.get()) + "\n")
+        p1.listBox.insert(END, ">" + p1.txtCommand.get() + " Power: " +
+                          str(p1.dutyCycleLeft.get()) + " " + str(p1.dutyCycleRight.get()) + "\n")
     else:
         p1.listBox.insert(END, ">" + p1.txtCommand.get() + "\n")
+    p1.listBox.see(END)
 
 
 def prnt_help(p1):
@@ -162,16 +210,19 @@ def goDASH(p1):
         biteTwo = chr(p1.dutyCycleLeft.get())
         biteThree = chr(p1.dutyCycleRight.get())
         biteFour = chr(0b00000000)
-        biteArray = [biteOne, biteTwo, biteThree, biteFour]
-        message = "".join(biteArray)
-        BT.write(message)
-        bread = BT.read(2)
-        left = ord(bread[1])
+        bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
         prnt_command(p1, 1)
-        p1.listBox.insert(END, str(left) + "\n")
+        prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+        p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     elif cmd.lower() == 'reverse':
+        biteOne = chr(0b10000000)
+        biteTwo = chr(p1.dutyCycleLeft.get())
+        biteThree = chr(p1.dutyCycleRight.get())
+        biteFour = chr(0b00000000)
+        bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
         prnt_command(p1, 1)
-        print('Reverse')
+        prntBS(p1, biteOne, biteTwo, biteThree, biteFour)
+        p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     elif cmd.lower() == 'right':
         prnt_command(p1, 0)
         print('Right')
@@ -179,29 +230,44 @@ def goDASH(p1):
         prnt_command(p1, 0)
         print('Left')
     elif cmd.lower() == 'stop':
+        biteOne = chr(0b10000000)
+        biteTwo = chr(0b00000000)
+        biteThree = chr(0b00000000)
+        biteFour = chr(0b00000000)
+        bread = mvcmd(p1, biteOne, biteTwo, biteThree, biteFour)
         prnt_command(p1, 0)
-        print('Stop')
+        p1.listBox.insert(END, "DASH Response: " + bread + "\n")
     elif cmd.lower() == 'help':
         prnt_help(p1)
     elif cmd.isdigit():
         print(int(p1.txtCommand.get()) % 192)
     elif cmd.lower() == 'test':
+        count = 1
+        bitearray = [0xFE] * 10000
+        print(bitearray)
+        # message = "".join(bitearray)
         start = timeit.default_timer()
-        count = 0
-        while count < 100:
-            BT.write(str(unichr(count)))
-            count += 1
-        mid = timeit.default_timer() - start
-        bread = BT.read(100)
+        BT.write(bitearray)
+        bread = BT.read(9000)
         finish = timeit.default_timer() - start
-        triptime = finish/2
-        datarate = 1/triptime
-        p1.listBox.insert(END, bread)
-        print(start)
-        print(mid)
-        print(finish)
-        print(bread)
-        print(datarate)
+        latency = (finish/9000)*1000
+        print(len(bread))
+        p1.listBox.insert(END, "10000 Bytes sent\n")
+        p1.listBox.insert(END, "Round Trip Time: " + str(finish*1000) + "ms\n")
+        p1.listBox.insert(END, "Round Trip Time per Byte: " + str(latency) + "ms\n")
+        p1.listBox.insert(END, "Response Time: " + str(latency/2) + "ms\n")
+    elif cmd.lower() == 'data':
+        count = 1
+        bitearray = [0xFE] * 10000
+        print(bitearray)
+        # message = "".join(bitearray)
+        start = timeit.default_timer()
+        BT.write(bitearray)
+        bread = BT.read(9000)
+        finish = timeit.default_timer() - start
+        latency = ((finish/9000)*1000)/2
+        p1.listBox.insert(END, "10000 Bytes sent\n")
+        p1.listBox.insert(END, "Datarate: " + str(1/(latency/8)) + "Kbps\n")
     elif cmd.lower() == 'latency':
         start = timeit.default_timer()
         BT.write("12345678901234567890123456789012345678901234567890")
@@ -209,6 +275,7 @@ def goDASH(p1):
         finish = timeit.default_timer() - start
         latency = (finish/50)*1000
         p1.listBox.insert(END, "Latency: " + str(latency) + "ms\n")
+        print(bread)
     elif cmd.lower() == 'feedback':
         BT.write("?")
         bread = BT.read(2)
